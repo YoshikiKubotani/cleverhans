@@ -20,6 +20,7 @@ def clip_eta(eta, norm, eps):
     reduc_ind = list(range(1, len(eta.size())))
     if norm == np.inf:
         eta = torch.clamp(eta, -eps, eps)
+        return eta
     else:
         if norm == 1:
             raise NotImplementedError("L1 clip is not implemented.")
@@ -35,8 +36,7 @@ def clip_eta(eta, norm, eps):
         factor = torch.min(
             torch.tensor(1.0, dtype=eta.dtype, device=eta.device), eps / norm
         )
-        eta *= factor
-    return eta
+        return eta * factor
 
 
 def get_or_guess_labels(model, x, **kwargs):
